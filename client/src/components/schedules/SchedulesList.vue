@@ -32,9 +32,10 @@
       class="elevation-1"
     >
       <template slot="items" slot-scope="props">
-        <td>{{ props.item.id_classroom }}</td>
-        <td class="text-xs-center">{{ props.item.initials }}</td>
-        <td class="text-xs-center">{{ props.item.description }}</td>
+        <td>{{ props.item.id_schedule }}</td>
+        <td class="text-xs-center">{{ props.item.start_time }}</td>
+        <td class="text-xs-center">{{ props.item.end_time }}</td>
+        <td class="text-xs-center">{{ props.item.days }}</td>
         <!-- <td class="justify-center layout px-0">
           <v-btn icon class="mx-0" @click="editItem(props.item)">
             <v-icon color="teal">edit</v-icon>
@@ -62,19 +63,20 @@
           sortable: false,
           value: 'id'
         },
-        { text: 'Sigla', value: 'initials' },
-        { text: 'Descripcion', value: 'description' },
+        { text: 'De', value: 'start_time' },
+        { text: 'A', value: 'end_time' },
+        { text: 'Dia', value: 'days'}
         // { text: 'Actions', value: 'id', sortable: false }
       ],
       items: [],
       editedIndex: -1,
       editedItem: {
-        id_classroom: '',
+        id_schedule: '',
         initials: '',
         description: '',
       },
       defaultItem: {
-        id_classroom: '',
+        id_schedule: '',
         initials: '',
         description: '',
       }
@@ -82,7 +84,7 @@
 
     computed: {
       formTitle () {
-        return this.editedIndex === -1 ? 'Nueva Aula' : 'Editar Aula'
+        return this.editedIndex === -1 ? 'Nuevo Horario' : 'Editar Horario'
       }
     },
 
@@ -93,15 +95,15 @@
     },
 
     created () {
-      this.getClassrooms()
+      this.getSchedules()
     },
 
     methods: {
-      getClassrooms () {
-        let uri = 'http://localhost:4001/classrooms'
+      getSchedules () {
+        let uri = 'http://localhost:4001/schedules'
         axios.get(uri)
           .then(res => {
-            console.log('Aulas obtenidas con exito')
+            console.log('Horarios obtenidas con exito')
             this.items = res.data
           })
           .catch(err => console.log(err))

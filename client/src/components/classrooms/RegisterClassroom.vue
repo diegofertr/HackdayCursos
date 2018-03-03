@@ -29,8 +29,8 @@
                             sm3>
                         <v-select :items="teachers"
                                   v-model="teacher"
-                                  :filter="customFilter"
-                                  item-text="description"
+                                  :filter="customFilterTeacher"
+                                  item-text="first_name"
                                   label="Seleccione al Docente"
                                   :error-messages="errors.collect('teacher')"
                                   v-validate="'required'"
@@ -201,6 +201,17 @@
           customFilter(item, queryText, itemText) {
             const hasValue = val => (val != null ? val : "");
             const text = hasValue(item.description);
+            const query = hasValue(queryText);
+            return (
+              text
+                .toString()
+                .toLowerCase()
+                .indexOf(query.toString().toLowerCase()) > -1
+            );
+          },
+          customFilterTeacher(item, queryText, itemText) {
+            const hasValue = val => (val != null ? val : "");
+            const text = hasValue(item.first_name);
             const query = hasValue(queryText);
             return (
               text

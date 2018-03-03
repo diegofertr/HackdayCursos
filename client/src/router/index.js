@@ -4,6 +4,7 @@ import HelloWorld from '@/components/HelloWorld'
 import TeachersList from '@/components/teachers/TeachersList'
 import SubjectsList from '@/components/subjects/SubjectsList'
 import ClassroomList from '@/components/classrooms/ClassroomList'
+import SchedulesList from '@/components/schedules/SchedulesList'
 import RegisterClassroom from "@/components/classrooms/RegisterClassroom";
 
 Vue.use(Router)
@@ -29,6 +30,11 @@ export default new Router({
       path: "/classrooms",
       name: "classrooms",
       component: ClassroomList
+    },
+    {
+      path: "/schedules",
+      name: "schedules",
+      component: SchedulesList
     },
     {
       path: "/register-classroom",
