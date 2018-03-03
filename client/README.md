@@ -1,6 +1,6 @@
-# client-courses
+# client
 
-> cliente hackday
+> Client of project hackday
 
 ## Build Setup
 

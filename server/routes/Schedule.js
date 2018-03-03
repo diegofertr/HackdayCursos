@@ -2,6 +2,7 @@
 const express = require('express')
 const router = express()
 const db = require('../db')
+const moment = require('moment')
 
 // get all schedules
 router.get('/', (req, res) => {
@@ -13,6 +14,14 @@ router.get('/', (req, res) => {
     .catch(() => res.status(500).json('Error grave'));
 })
 
+router.get('/:day', (req, res) => {
+  Promise.resolve()
+    .then(() => getSchedulesByDay(req.params.day))
+    .then(schedules => {
+      res.json(schedules);
+    })
+    .catch(() => res.status(500).json('Error grave'));
+})
 
 // post a schedule
 router.post('/', (req, res) => {
@@ -52,6 +61,32 @@ const createSchedule = (schedule) => {
     console.log(JSON.stringify(response));
     return response;
   }).catch(error => console.log(error));
+}
+
+const getSchedulesByDay = (day) => {
+  return db.schedule.findAll({
+    where: {
+      days: day
+    },
+    attributes: ['start_time', 'end_time'],
+    order: [
+      ['start_time', 'ASC']
+    ]
+  })
+    .then(response => {
+      console.log(`\n***Listando horarios ocupados del dia ${day}`);
+      // var startTime=moment("12:00", "HH:mm");
+      // var endTime=moment("16:05", "HH:mm");
+      // var duration = moment.duration(endTime.diff(startTime));
+      // var hours = parseInt(duration.asHours());
+      // var minutes = parseInt(duration.asMinutes())-hours*60;
+      // console.log (hours + ' hour and '+ minutes+' minutes.');
+      console.log(JSON.stringify(response));
+      return response;
+    })
+    .catch(error => {
+      throw error;
+    })
 }
 
 module.exports = router
