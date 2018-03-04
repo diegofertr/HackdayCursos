@@ -1,62 +1,66 @@
 <template>
-  <div>
-    <v-dialog v-model="dialog" max-width="500px">
-      <v-btn color="primary" dark slot="activator" class="mb-2">Nuevo Docente</v-btn>
-      <v-card>
-        <v-card-title>
-          <span class="headline">{{ formTitle }}</span>
-        </v-card-title>
-        <v-card-text>
-          <v-container grid-list-md>
-            <v-layout wrap>
-              <v-flex xs12 sm6 md6>
-                <v-text-field label="Nombres" v-model="editedItem.first_name"></v-text-field>
-              </v-flex>
-              <v-flex xs12 sm6 md6>
-                <v-text-field label="Apellidos" v-model="editedItem.last_name"></v-text-field>
-              </v-flex>
-              <v-flex xs12 sm6 md6>
-                <v-text-field label="Carnet Identidad" v-model="editedItem.identity_card"></v-text-field>
-              </v-flex>
-              <v-flex xs12 sm6 md6>
-                <v-text-field label="Cargo" v-model="editedItem.degree"></v-text-field>
-              </v-flex>
-            </v-layout>
-          </v-container>
-        </v-card-text>
-        <v-card-actions>
-          <v-spacer></v-spacer>
-          <v-btn color="blue darken-1" flat @click.native="close">Cancelar</v-btn>
-          <v-btn color="blue darken-1" flat @click="save">Guardar</v-btn>
-        </v-card-actions>
-      </v-card>
-    </v-dialog>
-    <v-data-table
-      :headers="headers"
-      :items="items"
-      hide-actions
-      class="elevation-1"
-    >
-      <template slot="items" slot-scope="props">
-        <td>{{ props.item.id_teacher }}</td>
-        <td class="text-xs-center">{{ props.item.first_name }}</td>
-        <td class="text-xs-center">{{ props.item.last_name }}</td>
-        <td class="text-xs-center">{{ props.item.identity_card }}</td>
-        <td class="text-xs-center">{{ props.item.degree }}</td>
-        <!-- <td class="justify-center layout px-0">
-          <v-btn icon class="mx-0" @click="editItem(props.item)">
-            <v-icon color="teal">edit</v-icon>
-          </v-btn>
-          <v-btn icon class="mx-0" @click="deleteItem(props.item)">
-            <v-icon color="pink">delete</v-icon>
-          </v-btn>
-        </td> -->
-      </template>
-      <template slot="no-data">
-        <v-btn color="primary" @click="initialize">Reset</v-btn>
-      </template>
-    </v-data-table>
-  </div>
+  <v-container>
+    <v-layout row wrap>
+      <v-flex xs12 class="text-xs-center">
+        <v-dialog v-model="dialog" max-width="500px">
+          <v-btn color="primary" dark slot="activator" class="mb-2">Nuevo Docente</v-btn>
+          <v-card>
+            <v-card-title>
+              <span class="headline">{{ formTitle }}</span>
+            </v-card-title>
+            <v-card-text>
+              <v-container grid-list-md>
+                <v-layout wrap>
+                  <v-flex xs12 sm6 md6>
+                    <v-text-field label="Nombres" v-model="editedItem.first_name"></v-text-field>
+                  </v-flex>
+                  <v-flex xs12 sm6 md6>
+                    <v-text-field label="Apellidos" v-model="editedItem.last_name"></v-text-field>
+                  </v-flex>
+                  <v-flex xs12 sm6 md6>
+                    <v-text-field label="Carnet Identidad" v-model="editedItem.identity_card"></v-text-field>
+                  </v-flex>
+                  <v-flex xs12 sm6 md6>
+                    <v-text-field label="Cargo" v-model="editedItem.degree"></v-text-field>
+                  </v-flex>
+                </v-layout>
+              </v-container>
+            </v-card-text>
+            <v-card-actions>
+              <v-spacer></v-spacer>
+              <v-btn color="blue darken-1" flat @click.native="close">Cancelar</v-btn>
+              <v-btn color="blue darken-1" flat @click="save">Guardar</v-btn>
+            </v-card-actions>
+          </v-card>
+        </v-dialog>
+        <v-data-table
+          :headers="headers"
+          :items="items"
+          hide-actions
+          class="elevation-1"
+        >
+          <template slot="items" slot-scope="props">
+            <td>{{ props.item.id_teacher }}</td>
+            <td class="text-xs-center">{{ props.item.first_name }}</td>
+            <td class="text-xs-center">{{ props.item.last_name }}</td>
+            <td class="text-xs-center">{{ props.item.identity_card }}</td>
+            <td class="text-xs-center">{{ props.item.degree }}</td>
+            <!-- <td class="justify-center layout px-0">
+              <v-btn icon class="mx-0" @click="editItem(props.item)">
+                <v-icon color="teal">edit</v-icon>
+              </v-btn>
+              <v-btn icon class="mx-0" @click="deleteItem(props.item)">
+                <v-icon color="pink">delete</v-icon>
+              </v-btn>
+            </td> -->
+          </template>
+          <template slot="no-data">
+            <v-btn color="primary" @click="initialize">Reset</v-btn>
+          </template>
+        </v-data-table>
+      </v-flex>
+    </v-layout>
+  </v-container>
 </template>
 <script>
   import axios from 'axios'
@@ -147,18 +151,10 @@
       save () {
         let uri = 'http://localhost:4001/teachers'
         axios.post(uri, this.editedItem)
-          .then(res => {
-            
-            this.$router.replace({name: 'teachers'});
+          .then(res => {            
+            console.log('Docente creado con éxito')
           })
           .catch(err => console.log(err));
-        
-        // if (this.editedIndex > -1) {
-        //   Object.assign(this.items[this.editedIndex], this.editedItem)
-        // } else {
-        //   this.items.push(this.editedItem)
-        // }
-        this.getTeachers()
         this.close()
       }
     }

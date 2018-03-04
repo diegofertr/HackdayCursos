@@ -1,6 +1,7 @@
 <template>
-    <div>
-        <v-container fluid>
+    <v-container>
+      <v-layout row wrap>
+        <v-flex xs12 class="text-xs-center">
             <form>
                 <v-layout row
                           wrap>
@@ -27,14 +28,14 @@
                     </v-flex>
                     <v-flex xs12
                             sm3>
-                        <v-select :items="teachers"
-                                  v-model="teacher"
-                                  :filter="customFilterTeacher"
-                                  item-text="first_name"
-                                  label="Seleccione al Docente"
-                                  :error-messages="errors.collect('teacher')"
+                        <v-select :items="classrooms"
+                                  v-model="classroom"
+                                  :filter="customFilterClassroom"
+                                  item-text="description"
+                                  label="Seleccione el Aula"
+                                  :error-messages="errors.collect('classroom')"
                                   v-validate="'required'"
-                                  data-vv-name="teacher"
+                                  data-vv-name="classroom"
                                   required
                                   autocomplete></v-select>
                     </v-flex>
@@ -154,14 +155,14 @@
                                 type="button">+</button>
                     </div>
                 </v-layout>
-
-                <v-btn @click="submit">submit</v-btn>
+                <v-btn @click="submit">Guardar Horario(s)</v-btn>
             </form>
-        </v-container>
-
-    </div>
+        </v-flex>
+      </v-layout>
+    </v-container>
 </template>
 <script>
+    import moment from 'moment'
     import axios from "axios";
     export default {
       $_veeValidate: {
@@ -186,15 +187,15 @@
           value5: "",
           subject: null,
           subjects: [],
-          teacher: null,
-          teachers: [],
+          classroom: null,
+          classrooms: [],
           dictionary: {
             custom: {
               subject: {
                 required: "Debe Seleccionar una Materia"
               },
               teacher: {
-                required: "Debe seleccionar un docente"
+                required: "Debe seleccionar un Aula"
               }
             }
           },
@@ -209,9 +210,9 @@
                 .indexOf(query.toString().toLowerCase()) > -1
             );
           },
-          customFilterTeacher(item, queryText, itemText) {
+          customFilterClassroom(item, queryText, itemText) {
             const hasValue = val => (val != null ? val : "");
-            const text = hasValue(item.first_name);
+            const text = hasValue(item.description);
             const query = hasValue(queryText);
             return (
               text
@@ -227,7 +228,7 @@
       },
       created () {
         this.getSubjects()
-        this.getTeachers()
+        this.getClassrooms()
       },
       methods: {
         getSubjects () {
@@ -239,12 +240,12 @@
             })
             .catch(err => console.log(err))
         },
-        getTeachers () {
-            let uri = 'http://localhost:4001/teachers'
+        getClassrooms () {
+            let uri = 'http://localhost:4001/classrooms'
             axios.get(uri)
             .then(res => {
-                console.log('Docentes obtenidos con exito')
-                this.teachers = res.data
+                console.log('Aulas obtenidas con éxito')
+                this.classrooms = res.data
             })
             .catch(err => console.log(err))
         },
@@ -254,14 +255,87 @@
               console.log(this.lunesList);
             this.lunesList.forEach(element => {
               axios.post("http://localhost:4001/schedules", {
-                start_time: "17:05:00",
-                end_time: "18:00:00",
+                start_time: moment(element.start).format('HH:mm:ss'),
+                end_time: moment(element.end).format('HH:mm:ss'),
                 days: "lunes",
-                fid_classroom: 1,
-                fid_subject: this.subject
-              });
+                fid_classroom: this.classroom.id_classroom,
+                fid_subject: this.subject.id_subject
+              })
+              .then(res => {
+                console.log('Horarios añadidos con éxito')
+              })
+              .catch(err => console.log(`Error al añadir horarios: ${err}`));
+              // console.log("=========================================================")
+              // console.log(`Reserva de la materia ${this.subject.description} en el aula ${this.classroom.description}`)
+              // console.log(`De ${moment(element.start).format('HH:mm')} a ${moment(element.end).format('HH:mm')}`)
+              // console.log("=========================================================\n")
             });
           }
+          if (this.martes) {
+              console.log(this.martesList);
+            this.martesList.forEach(element => {
+              axios.post("http://localhost:4001/schedules", {
+                start_time: moment(element.start).format('HH:mm:ss'),
+                end_time: moment(element.end).format('HH:mm:ss'),
+                days: "martes",
+                fid_classroom: this.classroom.id_classroom,
+                fid_subject: this.subject.id_subject
+              })
+              .then(res => {
+                console.log('Horarios añadidos con éxito')
+              })
+              .catch(err => console.log(`Error al añadir horarios: ${err}`));
+            });
+          }
+          if (this.miercoles) {
+              console.log(this.miercolesList);
+            this.miercolesList.forEach(element => {
+              axios.post("http://localhost:4001/schedules", {
+                start_time: moment(element.start).format('HH:mm:ss'),
+                end_time: moment(element.end).format('HH:mm:ss'),
+                days: "miercoles",
+                fid_classroom: this.classroom.id_classroom,
+                fid_subject: this.subject.id_subject
+              })
+              .then(res => {
+                console.log('Horarios añadidos con éxito')
+              })
+              .catch(err => console.log(`Error al añadir horarios: ${err}`));
+            });
+          }
+          if (this.jueves) {
+              console.log(this.juevesList);
+            this.juevesList.forEach(element => {
+              axios.post("http://localhost:4001/schedules", {
+                start_time: moment(element.start).format('HH:mm:ss'),
+                end_time: moment(element.end).format('HH:mm:ss'),
+                days: "jueves",
+                fid_classroom: this.classroom.id_classroom,
+                fid_subject: this.subject.id_subject
+              })
+              .then(res => {
+                console.log('Horarios añadidos con éxito')
+              })
+              .catch(err => console.log(`Error al añadir horarios: ${err}`));
+            });
+          }
+          if (this.viernes) {
+              console.log(this.viernesList);
+            this.viernesList.forEach(element => {
+              axios.post("http://localhost:4001/schedules", {
+                start_time: moment(element.start).format('HH:mm:ss'),
+                end_time: moment(element.end).format('HH:mm:ss'),
+                days: "viernes",
+                fid_classroom: this.classroom.id_classroom,
+                fid_subject: this.subject.id_subject
+              })
+              .then(res => {
+                console.log('Horarios añadidos con éxito')
+              })
+              .catch(err => console.log(`Error al añadir horarios: ${err}`));
+            });
+          }
+
         },
         getHours1() {
           return this.options;
