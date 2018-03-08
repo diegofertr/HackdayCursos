@@ -6,6 +6,9 @@ import router from './router'
 import Vuetify from 'vuetify'
 import 'vuetify/dist/vuetify.css'
 import VeeValidate from "vee-validate";
+import FullCalendar from 'vue-full-calendar'
+import "fullcalendar/dist/fullcalendar.min.css";
+Vue.use(FullCalendar)
 Vue.use(Vuetify, {
   theme: {
     primary: '#d32f2f',
@@ -19,7 +22,8 @@ Vue.use(Vuetify, {
 })
 import ElementUI from "element-ui";
 import "element-ui/lib/theme-chalk/index.css";
-Vue.use(ElementUI);
+import locale from 'element-ui/lib/locale/lang/es'
+Vue.use(ElementUI, { locale });
 Vue.use(VeeValidate);
 Vue.config.productionTip = false
 

@@ -39,6 +39,16 @@
                                   required
                                   autocomplete></v-select>
                     </v-flex>
+                    <v-flex xs12 sm1>
+                        <v-subheader v-text="'Fecha'"></v-subheader>
+                    </v-flex>
+                    <v-flex xs12 sm3>
+                      <el-date-picker
+                        v-model="date"
+                        type="date"
+                        placeholder="Elige un día">
+                      </el-date-picker>
+                    </v-flex>
                 </v-layout>
                 <v-layout row>
                     <el-checkbox v-model="lunes"
@@ -189,6 +199,7 @@
           subjects: [],
           classroom: null,
           classrooms: [],
+          date: null,
           dictionary: {
             custom: {
               subject: {
@@ -326,6 +337,8 @@
                 start_time: moment(element.start).format('HH:mm:ss'),
                 end_time: moment(element.end).format('HH:mm:ss'),
                 days: "viernes",
+                // date: moment(this.date).format('YYYY-MM-DD'),
+                date: moment(this.date).format(),
                 fid_classroom: this.classroom.id_classroom,
                 fid_subject: this.subject.id_subject
               })

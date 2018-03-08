@@ -17,6 +17,10 @@ module.exports = (sequelize, DataType) => {
       type: DataType.STRING(50),
       allowNull: false
     },
+    date: {
+      type: DataType.DATE,
+      allowNull: false
+    },
     // days: {
     //   type: DataType.ARRAY(DataType.STRING(50)),
     //   defaultValue: null,

@@ -23,6 +23,25 @@ router.get('/:day', (req, res) => {
     .catch(() => res.status(500).json('Error grave'));
 })
 
+router.get('/:day/:start_time/:end_time', (req, res) => {
+  Promise.resolve()
+    .then(() => createScheduleAlternative(req.params.day, req.params.start_time, req.params.end_time))
+    .then(response  => {
+      if (!response) {
+        res.send({message: 'El horario está disponible'})
+      } else {
+        res.send({
+          message: 'El horario ya está ocupado',
+          response
+        })
+      }
+      // res.send({
+      //   response 
+      // })
+    })
+    .catch(() => res.status(500).json('El horario que solicitó está disponible'))
+})
+
 // post a schedule
 router.post('/', (req, res) => {
   Promise.resolve()
@@ -42,6 +61,22 @@ const getSchedules = () => {
     })
     .catch(error => {
       throw error;
+    })
+}
+
+const createScheduleAlternative = (days, start_time, end_time) => {
+  return db.schedule.findOne({
+    where: {
+      days: days,
+      start_time: start_time,
+      end_time: end_time
+    }
+  })
+    .then(response => {
+      return response
+    })
+    .catch(err => {
+      throw err
     })
 }
 
@@ -75,12 +110,6 @@ const getSchedulesByDay = (day) => {
   })
     .then(response => {
       console.log(`\n***Listando horarios ocupados del dia ${day}`);
-      // var startTime=moment("12:00", "HH:mm");
-      // var endTime=moment("16:05", "HH:mm");
-      // var duration = moment.duration(endTime.diff(startTime));
-      // var hours = parseInt(duration.asHours());
-      // var minutes = parseInt(duration.asMinutes())-hours*60;
-      // console.log (hours + ' hour and '+ minutes+' minutes.');
       console.log(JSON.stringify(response));
       return response;
     })
